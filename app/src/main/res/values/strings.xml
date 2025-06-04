@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Proyecto</string>
+    <!-- Títulos y etiquetas -->
+    <string name="registro">Registro</string>
+    <string name="nombre">Escriba sus nombres completos</string>
+    <string name="correo">Correo electrónico</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="genero">Género</string>
+    <string name="categoria">Categoría de noticias</string>
+    <string name="provincias">Provincias</string>
+
+    <!-- Género -->
+    <string name="masculino">Masculino</string>
+    <string name="femenino">Femenino</string>
+
+    <!-- Categorías -->
+    <string name="politica">Política</string>
+    <string name="deporte">Deporte</string>
+    <string name="cultura">Cultura</string>
+    <string name="educacion">Educación</string>
+    <string name="salud">Salud</string>
+
+    <!-- Botones -->
+    <string name="registrar">Registrar</string>
+    <string name="limpiar">Limpiar</string>
+
+    <!-- Resultado -->
+    <string name="mostrar_datos">Mostrar datos</string>
+    <string name="bienvenido">¡Bienvenido!</string>
+    <string name="ingresa_datos">Ingresa tus datos</string>
+    <string name="correo_electronico">Correo electrónico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="no_tienes_cuenta">¿No tienes cuenta?</string>
+    <string name="titulo_label">Registro de Usuario</string>
+
+    <string name="nombre_label">Nombre</string>
+    <string name="nombre_hint">Escriba sus apellidos y nombres completos</string>
+
+    <string name="contrasena_label">Contraseña</string>
+    <string name="contrasena_hint">Escriba su contraseña</string>
+
+    <string name="correo_label">Correo Electrónico</string>
+    <string name="correo_hint">Escriba su correo electrónico</string>
+
+    <string name="genero_label">Género</string>
+    <string name="genero_masculino">Masculino</string>
+    <string name="genero_femenino">Femenino</string>
+
+    <string name="hobbie_label">Hobbie</string>
+    <string name="hobbie_leer">Leer</string>
+    <string name="hobbie_deporte">Hacer Deporte</string>
+    <string name="hobbie_viajar">Viajar</string>
+
+    <string name="pais_label">País</string>
+
+    <string name="boton_registrar">Registrar</string>
+    <string name="boton_limpiar">Limpiar Todo</string>
+
+    <string name="resultado_titulo">Mostrar Datos</string>
+    <string name="resultado_placeholder">Aquí se mostrarán los datos ingresados</string>
+
+</resources>

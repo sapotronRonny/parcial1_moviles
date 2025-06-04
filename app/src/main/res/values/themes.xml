@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Proyecto" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Personaliza el tema claro aquí. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Cambia el color de la barra de notificaciones -->
+        <item name="android:statusBarColor">@color/mi_color_personalizado</item>
+    </style>
+
+    <style name="Theme.Proyecto" parent="Base.Theme.Proyecto" />
+</resources>

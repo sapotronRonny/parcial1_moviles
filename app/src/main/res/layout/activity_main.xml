@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <!-- Holaaaaaaaaaaaa que tal -->
+    <!-- Layout superior con campos de login -->
+    <LinearLayout
+        android:id="@+id/layoutSuperior"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:background="#f9f8ee"
+        android:padding="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layoutInferior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f9f8ee"
+            android:paddingTop="40dp"
+            android:paddingBottom="0dp"
+            android:paddingStart="25dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bienvenido"
+                android:textColor="@color/colorTextoBienvenida"
+                android:textSize="60sp" />
+        </LinearLayout>
+
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="@string/ingresa_datos"-->
+        <!--            android:textSize="20sp"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:layout_marginLeft="25dp"-->
+        <!--            android:layout_marginTop="8dp" />-->
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:src="@drawable/logodesingfinal" />
+
+        <!-- Campo de correo electrónico -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            app:boxBackgroundMode="none"
+            app:boxStrokeColor="#D4AF37"
+            app:boxCornerRadiusTopStart="0dp"
+            app:boxCornerRadiusTopEnd="0dp"
+            app:boxCornerRadiusBottomStart="0dp"
+            app:boxCornerRadiusBottomEnd="0dp"
+            app:startIconDrawable="@drawable/personita"
+            app:startIconTint="#ff4a1c">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="@string/correo_electronico"
+                android:paddingLeft="10dp"
+                android:paddingEnd="10dp"
+                android:textColor="#ff4a1c"
+                android:textColorHint="#ff4a1c"
+                android:textSize="15sp"
+                android:paddingStart="40dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="20dp"
+            app:boxBackgroundMode="none"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:endIconMode="password_toggle"
+            app:startIconDrawable="@drawable/baseline_password_24"
+            app:startIconTint="#ff4a1c">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextContraseña"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="@string/contrasena"
+                android:textColor="#ff4a1c"
+                android:textColorHint="#ff4a1c"
+                android:textSize="15sp"
+                android:paddingLeft="10dp"
+                android:inputType="textPassword"
+                android:paddingEnd="50dp"
+                android:paddingStart="40dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnIniciarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/iniciar_sesion"
+            android:layout_marginTop="50dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:backgroundTint="#ff4a1c"
+            app:cornerRadius="12dp"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+    <!-- Layout inferior con el enlace de registro -->
+    <LinearLayout
+        android:id="@+id/layoutInferior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#f9f8ee">
+
+        <TextView
+            android:id="@+id/linkRegistro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:text="@string/no_tienes_cuenta"
+            android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="15dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

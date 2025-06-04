@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1084324529190",
+    "project_id": "basedatosmovil-e978f",
+    "storage_bucket": "basedatosmovil-e978f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084324529190:android:1db0b051894295b84452e7",
+        "android_client_info": {
+          "package_name": "com.example.proyecto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQ0UyGdy4Vr9coBTZZ4U_bOg0SBYbv6Sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

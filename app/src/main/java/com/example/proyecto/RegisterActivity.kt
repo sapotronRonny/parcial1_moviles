@@ -15,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.util.UUID
 import android.graphics.Bitmap
+import android.util.Base64
+import java.io.ByteArrayOutputStream
 import android.os.Environment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -47,78 +49,28 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var ivFoto: ImageView
     private var imageUri: Uri? = null
     private val REQUEST_PERMISSIONS_CODE = 100
+    private var imageBase64: String? = null
 
     companion object {
         private const val KEY_IMAGE_URI = "key_image_uri"
     }
 
-    private fun checkAndRequestPermissions(): Boolean {
-        val permissionsNeeded = mutableListOf<String>()
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.CAMERA)
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-
-        return if (permissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permissionsNeeded.toTypedArray(), REQUEST_PERMISSIONS_CODE)
-            false
-        } else {
-            true
-        }
-    }
-
-    fun onTakePhotoClick() {
-        if (checkAndRequestPermissions()) {
-            takePictureLauncher
-        }
-    }
-
-    fun onSelectFromGalleryClick() {
-        if (checkAndRequestPermissions()) {
-            pickPhotoLauncher
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == REQUEST_PERMISSIONS_CODE) {
-            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                // Permisos concedidos
-            } else {
-                Toast.makeText(this, "Se requieren permisos para continuar", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    // Lanzadores para foto desde cámara y galería
     private val pickPhotoLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            ivFoto.setImageURI(it)
-            imageUri = it
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, it)
+            ivFoto.setImageBitmap(bitmap)
+            imageBase64 = bitmapToBase64(bitmap)
         }
     }
-
 
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
         bitmap?.let {
             ivFoto.setImageBitmap(it)
-
-            // Crear archivo temporal
-            val file = File.createTempFile("fotoPerfil", ".jpg", cacheDir)
-            val outputStream = FileOutputStream(file)
-            it.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
-
-            // Obtener Uri segura usando FileProvider
-            imageUri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
+            imageBase64 = bitmapToBase64(it)
         }
-
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,13 +96,7 @@ class RegisterActivity : AppCompatActivity() {
         btnLimpiar = findViewById(R.id.btnLimpiar)
         ivFoto = findViewById(R.id.ivFoto)
 
-        if (savedInstanceState != null) {
-            val savedUriString = savedInstanceState.getString(KEY_IMAGE_URI)
-            if (savedUriString != null) {
-                imageUri = Uri.parse(savedUriString)
-                ivFoto.setImageURI(imageUri)
-            }
-        }
+
 
         val provincias = arrayOf(
             "Bolívar", "Chone", "El Carmen", "Flavio Alfaro", "Jama", "Jaramijó",
@@ -165,13 +111,15 @@ class RegisterActivity : AppCompatActivity() {
         btnRegistro.setOnClickListener { enviarDatos() }
         btnLimpiar.setOnClickListener { limpiardatos() }
 
+
+
         findViewById<Button>(R.id.btnTomarFoto).setOnClickListener {
             takePictureLauncher.launch(null)
         }
-
         findViewById<Button>(R.id.btnCargarFoto).setOnClickListener {
             pickPhotoLauncher.launch("image/*")
         }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -179,6 +127,13 @@ class RegisterActivity : AppCompatActivity() {
         imageUri?.let {
             outState.putString(KEY_IMAGE_URI, it.toString())
         }
+    }
+
+    private fun bitmapToBase64(bitmap: Bitmap): String {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        val byteArray = outputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 
     private fun enviarDatos() {
@@ -219,56 +174,36 @@ class RegisterActivity : AppCompatActivity() {
             if (checkPolitica.isChecked) add("Política")
         }
 
-        if (imageUri == null) {
-            Toast.makeText(this, "Por favor selecciona una foto", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Crear usuario en Firebase Auth
         auth.createUserWithEmailAndPassword(correo, contraseña)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val userId = auth.currentUser?.uid ?: return@addOnCompleteListener
 
-                    // Subir imagen a Firebase Storage
-                    val storageRef = FirebaseStorage.getInstance().reference
-                    val fileRef = storageRef.child("fotos_usuarios/${UUID.randomUUID()}.jpg")
+                    // Construir el mapa de usuario
+                    val usuario = hashMapOf(
+                        "nombre" to nombre,
+                        "correo" to correo,
+                        "genero" to genero,
+                        "noticia" to noticia.joinToString(", "),
+                        "provincias" to provincia
+                    )
+                    imageBase64?.let { usuario["fotoBase64"] = it }
 
-                    fileRef.putFile(imageUri!!)
+                    db.collection("usuarios").document(userId)
+                        .set(usuario)
                         .addOnSuccessListener {
-                            fileRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                                val fotoUrl = downloadUri.toString()
-
-                                val usuario = Usuario(
-                                    nombre = nombre,
-                                    correo = correo,
-                                    genero = genero,
-                                    noticia = noticia.joinToString(", "),
-                                    provincias = provincia,
-                                    fotoUrl = fotoUrl
-                                )
-
-                                // Guardar datos en Firestore
-                                db.collection("usuarios").document(userId)
-                                    .set(usuario)
-                                    .addOnSuccessListener {
-                                        Toast.makeText(this, "Registro exitoso", Toast.LENGTH_LONG).show()
-                                        irHome()
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(this, "Error al guardar datos: ${it.message}", Toast.LENGTH_LONG).show()
-                                    }
-                            }.addOnFailureListener {
-                                Toast.makeText(this, "Error al obtener URL de la imagen", Toast.LENGTH_SHORT).show()
-                            }
+                            Toast.makeText(this, "Registro exitoso", Toast.LENGTH_LONG).show()
+                            irHome()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(this, "Error al subir imagen: ${it.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Error al guardar datos: ${it.message}", Toast.LENGTH_LONG).show()
                         }
                 } else {
                     Toast.makeText(this, "Error al crear usuario: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                 }
             }
+
+
     }
 
     private fun limpiardatos() {

@@ -6,5 +6,5 @@ data class Usuario(
     val genero: String = "",
     val noticia: String = "",
     val provincias: String = "",
-    val fotoUrl: String = ""
+    val fotoBase64: String? = null
 )

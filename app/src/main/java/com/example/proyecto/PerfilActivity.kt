@@ -1,6 +1,7 @@
 package com.example.proyecto
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
@@ -10,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.widget.Button
 
 class PerfilActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -56,6 +58,11 @@ class PerfilActivity : AppCompatActivity() {
                 }
         } else {
             tvPerfil.text = "Usuario no autenticado"
+        }
+        val btnModificar = findViewById<Button>(R.id.btnModificarPerfil)
+        btnModificar.setOnClickListener {
+            val intent = Intent(this, ActualizarPerfil::class.java)
+            startActivity(intent)
         }
     }
 }

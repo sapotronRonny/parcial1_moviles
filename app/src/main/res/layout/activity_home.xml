@@ -6,10 +6,18 @@
     android:layout_height="match_parent">
 
     <!-- CONTENIDO PRINCIPAL -->
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f9f8ee">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="15dp">
 
         <!-- Botón para abrir el menú -->
         <ImageButton
@@ -19,16 +27,29 @@
             android:layout_margin="16dp"
             android:src="@android:drawable/ic_menu_sort_by_size"
             android:contentDescription="Menú"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:backgroundTint="#AA4212"/>
 
         <!-- Aquí va tu contenido principal -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contenido Principal"
+            android:textColor="@color/colorTextoBienvenida"
             android:textSize="18sp"
             android:layout_gravity="center" />
     </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_agregar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:contentDescription="Agregar publicación"
+            android:src="@android:drawable/ic_input_add"
+            app:tint="#f9f8ee"
+            app:backgroundTint="#AA4212" />
+    </FrameLayout>
 
     <!-- MENÚ LATERAL -->
     <com.google.android.material.navigation.NavigationView
@@ -39,17 +60,6 @@
         app:menu="@menu/drawer_menu"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_agregar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="Agregar publicación"
-        android:src="@android:drawable/ic_input_add"
-        app:tint="@android:color/white"
-        app:backgroundTint="@color/purple_500" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

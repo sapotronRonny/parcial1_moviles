@@ -25,9 +25,9 @@ class HomeActivity : AppCompatActivity() {
 
 //        agregar redireccion a creador de publicacion
 
-        val fabAgregar: FloatingActionButton = findViewById(R.id.fab_agregar)
+        val fabAgregar = findViewById<FloatingActionButton>(R.id.fab_agregar)
         fabAgregar.setOnClickListener {
-            val intent = Intent(this, AgregarPublicacionesActivity::class.java)
+            val intent = Intent(this, CrearpubliActivity::class.java)
             startActivity(intent)
         }
 

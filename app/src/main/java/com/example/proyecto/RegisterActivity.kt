@@ -25,7 +25,7 @@ import java.io.File
 import java.io.FileOutputStream
 import android.content.pm.PackageManager
 import android.Manifest
-
+import android.view.View
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -50,6 +50,7 @@ class RegisterActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private val REQUEST_PERMISSIONS_CODE = 100
     private var imageBase64: String? = null
+    private lateinit var btnEliminarFoto: ImageButton
 
     companion object {
         private const val KEY_IMAGE_URI = "key_image_uri"
@@ -60,6 +61,7 @@ class RegisterActivity : AppCompatActivity() {
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, it)
             ivFoto.setImageBitmap(bitmap)
             imageBase64 = bitmapToBase64(bitmap)
+            btnEliminarFoto.visibility = View.VISIBLE
         }
     }
 
@@ -67,6 +69,7 @@ class RegisterActivity : AppCompatActivity() {
         bitmap?.let {
             ivFoto.setImageBitmap(it)
             imageBase64 = bitmapToBase64(it)
+            btnEliminarFoto.visibility = View.VISIBLE
         }
     }
 
@@ -95,7 +98,7 @@ class RegisterActivity : AppCompatActivity() {
         tvResultado = findViewById(R.id.tvResultado)
         btnLimpiar = findViewById(R.id.btnLimpiar)
         ivFoto = findViewById(R.id.ivFoto)
-
+        btnEliminarFoto = findViewById(R.id.btnEliminarFoto)
 
 
         val provincias = arrayOf(
@@ -111,8 +114,18 @@ class RegisterActivity : AppCompatActivity() {
         btnRegistro.setOnClickListener { enviarDatos() }
         btnLimpiar.setOnClickListener { limpiardatos() }
 
+        val btnEliminarFoto = findViewById<ImageButton>(R.id.btnEliminarFoto)
+        val ivFoto = findViewById<ImageView>(R.id.ivFoto)
+
+        btnEliminarFoto.setOnClickListener {
+            ivFoto.setImageResource(0)
+            imageBase64 = null
+            btnEliminarFoto.visibility = View.GONE
+        }
 
 
+
+        // Configurar lanzadores para tomar y cargar fotos
         findViewById<Button>(R.id.btnTomarFoto).setOnClickListener {
             takePictureLauncher.launch(null)
         }
@@ -193,9 +206,11 @@ class RegisterActivity : AppCompatActivity() {
                         .set(usuario)
                         .addOnSuccessListener {
                             Toast.makeText(this, "Registro exitoso", Toast.LENGTH_LONG).show()
+                            auth.signOut()
                             irHome()
                         }
                         .addOnFailureListener {
+                            auth.currentUser?.delete()
                             Toast.makeText(this, "Error al guardar datos: ${it.message}", Toast.LENGTH_LONG).show()
                         }
                 } else {

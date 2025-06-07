@@ -165,14 +165,31 @@
                 android:textSize="16sp"
                 android:layout_marginTop="16dp"/>
 
-            <ImageView
-                android:id="@+id/ivFoto"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+            <FrameLayout
+                android:id="@+id/frameFoto"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center_horizontal"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/border_image" />
+                android:background="@drawable/border_image">
+
+                <ImageView
+                    android:id="@+id/ivFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/rounded_image"
+                    android:clipToOutline="true"/>
+
+                <ImageButton
+                    android:id="@+id/btnEliminarFoto"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="top|end"
+                    android:background="@android:color/transparent"
+                    android:src="@android:drawable/ic_menu_close_clear_cancel"
+                    android:contentDescription="Eliminar foto"
+                    android:visibility="gone"/>
+            </FrameLayout>
 
             <LinearLayout
                 android:orientation="horizontal"

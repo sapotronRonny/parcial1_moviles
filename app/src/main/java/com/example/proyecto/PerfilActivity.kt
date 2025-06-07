@@ -64,5 +64,10 @@ class PerfilActivity : AppCompatActivity() {
             val intent = Intent(this, ActualizarPerfil::class.java)
             startActivity(intent)
         }
+        val btnEliminarCuenta = findViewById<Button>(R.id.btnEliminarCuenta)
+        btnEliminarCuenta.setOnClickListener {
+            val intent = Intent(this, EliminarCuenta::class.java)
+            startActivity(intent)
+        }
     }
 }

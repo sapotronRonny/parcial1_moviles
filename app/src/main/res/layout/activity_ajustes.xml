@@ -15,4 +15,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Modo Oscuro" />
+    <Button
+        android:id="@+id/btnModificarPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Modificar Perfil"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"/>
+    <Button
+        android:id="@+id/btnEliminarCuenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eliminar Cuenta"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"/>
 </LinearLayout>

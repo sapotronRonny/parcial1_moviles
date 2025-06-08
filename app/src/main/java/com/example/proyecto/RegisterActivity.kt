@@ -143,9 +143,38 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun bitmapToBase64(bitmap: Bitmap): String {
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        val byteArray = outputStream.toByteArray()
+        // Reescalar si el ancho es mayor a 1280px
+        val maxWidth = 1280
+        var scaledBitmap = bitmap
+        if (bitmap.width > maxWidth) {
+            val aspectRatio = bitmap.height.toDouble() / bitmap.width
+            val newHeight = (maxWidth * aspectRatio).toInt()
+            scaledBitmap = Bitmap.createScaledBitmap(bitmap, maxWidth, newHeight, true)
+        }
+
+        var quality = 90
+        var byteArray: ByteArray
+        do {
+            val outputStream = ByteArrayOutputStream()
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+            byteArray = outputStream.toByteArray()
+            quality -= 10
+        } while (byteArray.size > 1024 * 1024 && quality > 10)
+
+        // Si aún así pesa más de 1MB, reescalar más pequeño y volver a intentar
+        while (byteArray.size > 1024 * 1024 && scaledBitmap.width > 640) {
+            val newWidth = scaledBitmap.width / 2
+            val newHeight = scaledBitmap.height / 2
+            scaledBitmap = Bitmap.createScaledBitmap(scaledBitmap, newWidth, newHeight, true)
+            quality = 90
+            do {
+                val outputStream = ByteArrayOutputStream()
+                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+                byteArray = outputStream.toByteArray()
+                quality -= 10
+            } while (byteArray.size > 1024 * 1024 && quality > 10)
+        }
+
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 

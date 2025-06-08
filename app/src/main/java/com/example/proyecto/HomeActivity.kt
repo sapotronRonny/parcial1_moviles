@@ -46,6 +46,12 @@ class HomeActivity : AppCompatActivity() {
                     val intent = Intent(this, PerfilActivity::class.java)
                     startActivity(intent)
                 }
+                R.id.nav_settings -> {
+                    Toast.makeText(this, "Modos", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, Ajustes::class.java)
+                    startActivity(intent)
+                }
+
                 R.id.nav_logout -> {
                     Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show()
                     cerrarSesion()

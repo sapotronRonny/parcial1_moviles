@@ -30,6 +30,15 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:backgroundTint="#AA4212"/>
 
+        <!-- RecyclerView para mostrar publicaciones -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:clipToPadding="false"/>
+
         <!-- Aquí va tu contenido principal -->
         <TextView
             android:layout_width="wrap_content"

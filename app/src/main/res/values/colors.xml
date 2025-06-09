@@ -7,4 +7,6 @@
     <color name="mi_color_personalizado">#FF5722</color>
     <color name="purple_700">#3700B3</color>
     <color name="purple_500">#370073</color>
+    <color name="primary">#AA4212</color>
+    <color name="background">#f9f8ee</color>
 </resources>

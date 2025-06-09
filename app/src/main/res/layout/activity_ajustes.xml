@@ -1,39 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:padding="32dp"
+    android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/btnClaro"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Modo Claro" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
 
-    <Button
-        android:id="@+id/btnOscuro"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temas: "
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginEnd="16dp"/>
+
+        <Button
+            android:id="@+id/btnClaro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modo Claro"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnOscuro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modo Oscuro"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Modo Oscuro" />
-    <Button
-        android:id="@+id/btnModificarPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Modificar Perfil"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"/>
-    <Button
-        android:id="@+id/btnModificarFotoPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Modificar Perfil"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Editar nombre:"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginEnd="16dp"/>
+
+        <Button
+            android:id="@+id/btnModificarPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cambiar"
+            android:minWidth="0dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"/>
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <Button
         android:id="@+id/btnEliminarCuenta"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Eliminar Cuenta"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"/>
+        android:textColor="@android:color/white"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:layout_marginTop="32dp"/>
 </LinearLayout>

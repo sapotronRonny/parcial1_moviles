@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.model.Publicacion
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +23,10 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var navView: NavigationView
     private lateinit var btnMenu: ImageButton
     private lateinit var recyclerView: RecyclerView
+    private lateinit var chipGroupFiltros: ChipGroup
+
+    private var publicaciones: List<Publicacion> = emptyList()
+    private lateinit var adapter: PublicacionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,21 +35,42 @@ class HomeActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        chipGroupFiltros = findViewById(R.id.chipGroupFiltros)
+
+        adapter = PublicacionAdapter(emptyList()) { publicacion ->
+            val intent = Intent(this, DetallePublicacionActivity::class.java)
+            intent.putExtra("publicacion", publicacion)
+            startActivity(intent)
+        }
+        recyclerView.adapter = adapter
 
         // Cargar todas las publicaciones usando el método del adapter
         PublicacionAdapter.cargarPublicaciones(
-            onResult = { publicaciones ->
-                val adapter = PublicacionAdapter(publicaciones) { publicacion ->
-                    val intent = Intent(this, DetallePublicacionActivity::class.java)
-                    intent.putExtra("publicacion", publicacion)
-                    startActivity(intent)
-                }
-                recyclerView.adapter = adapter
+            onResult = { publicacionesCargadas ->
+                publicaciones = publicacionesCargadas
+                adapter.actualizarLista(publicaciones)
             },
             onError = { e ->
                 Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         )
+
+        chipGroupFiltros.setOnCheckedChangeListener { _, checkedId ->
+            val filtro = when (checkedId) {
+                R.id.chkPolitica -> "Política"
+                R.id.chkDeportes -> "Deporte"
+                R.id.chkCultura -> "Cultura"
+                R.id.chkEducacion -> "Educación"
+                R.id.chkSalud -> "Salud"
+                else -> null
+            }
+            if (filtro != null) {
+                val filtradas = publicaciones.filter { it.categoria == filtro }
+                adapter.actualizarLista(filtradas)
+            } else {
+                adapter.actualizarLista(publicaciones)
+            }
+        }
 
         val fabAgregar = findViewById<FloatingActionButton>(R.id.fab_agregar)
         fabAgregar.setOnClickListener {

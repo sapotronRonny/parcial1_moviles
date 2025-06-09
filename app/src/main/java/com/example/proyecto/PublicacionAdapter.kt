@@ -9,14 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.model.Publicacion
-import com.example.proyecto.model.Usuario
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.proyecto.R
 
 class PublicacionAdapter(
-    private val publicaciones: List<Publicacion>,
+    private var publicaciones: List<Publicacion>,
     private val onItemClick: (Publicacion) -> Unit
-
 ) : RecyclerView.Adapter<PublicacionAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,6 +55,12 @@ class PublicacionAdapter(
 
     override fun getItemCount() = publicaciones.size
 
+    // Método para actualizar la lista de publicaciones
+    fun actualizarLista(nuevaLista: List<Publicacion>) {
+        publicaciones = nuevaLista
+        notifyDataSetChanged()
+    }
+
     companion object {
         fun cargarPublicaciones(
             onResult: (List<Publicacion>) -> Unit,
@@ -77,6 +80,7 @@ class PublicacionAdapter(
                             autorNombre = doc.getString("autorNombre") ?: "",
                             titulo = doc.getString("titulo") ?: "",
                             cuerpo = doc.getString("cuerpo") ?: "",
+                            categoria = doc.getString("categoria") ?: "",
                             urlImagen = doc.getString("urlImagen") ?: "",
                             creadoEn = creadoEn
                         )
@@ -88,37 +92,4 @@ class PublicacionAdapter(
                 }
         }
     }
-
-
 }
-
-//    companion object {
-//        fun cargarPublicaciones(
-//            onResult: (List<Publicacion>) -> Unit,
-//            onError: (Exception) -> Unit
-//        ) {
-//            val db = FirebaseFirestore.getInstance()
-//            db.collection("publicaciones")
-//                .get()
-//                .addOnSuccessListener { result ->
-//                    val publicaciones = result.map { doc ->
-//                        val creadoEnValue = doc.get("creadoEn")
-//                        val creadoEn = if (creadoEnValue is Number) creadoEnValue.toLong() else 0L
-//
-//                        Publicacion(
-//                            id = doc.id,
-//                            idUsuario = doc.getString("idUsuario") ?: "",
-//                            autorNombre = doc.getString("autorNombre") ?: "",
-//                            titulo = doc.getString("titulo") ?: "",
-//                            cuerpo = doc.getString("cuerpo") ?: "",
-//                            urlImagen = doc.getString("urlImagen") ?: "",
-//                            creadoEn = creadoEn
-//                        )
-//                    }
-//                    onResult(publicaciones)
-//                }
-//                .addOnFailureListener { e ->
-//                    onError(e)
-//                }
-//        }
-//    }

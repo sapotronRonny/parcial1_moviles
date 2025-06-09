@@ -8,6 +8,7 @@ data class Publicacion(
     val autorNombre: String = "",
     val titulo: String = "",
     val cuerpo: String = "",
+    val categoria: String = "",
     val urlImagen: String = "",
     val creadoEn: Long = 0L // O el tipo que uses
 ): Serializable

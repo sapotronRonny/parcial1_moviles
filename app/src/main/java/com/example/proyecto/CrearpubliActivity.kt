@@ -19,6 +19,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.Timestamp
 import android.graphics.BitmapFactory
+import android.view.View
 
 class CrearpubliActivity : AppCompatActivity() {
 
@@ -92,22 +93,21 @@ class CrearpubliActivity : AppCompatActivity() {
         val cuerpo = etCuerpo.text.toString().trim()
         val usuarioActualId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        // Obtener la categoría seleccionada
-//        val selectedChipId = chipGroupCategoria.checkedChipId
-//        val categoria = if (selectedChipId != -1) {
-//            findViewById<Chip>(selectedChipId).text.toString()
-//        } else {
-//            ""
-//        }
-//
-//        if (titulo.isEmpty() || cuerpo.isEmpty() || categoria.isEmpty()) {
-//            Toast.makeText(this, "Completa todos los campos y selecciona una categoría", Toast.LENGTH_SHORT).show()
-//            return
-//        }
+        // Validar selección de categoría usando View.NO_ID
+        val categoriaSeleccionada = chipGroupCategoria.checkedChipId != View.NO_ID
+        val categoria = if (categoriaSeleccionada) {
+            findViewById<Chip>(chipGroupCategoria.checkedChipId).text.toString()
+        } else {
+            ""
+        }
 
-//        val base64Imagen = imagenUri?.let { uriToBase64(it) } ?: ""
-//
-//        guardarEnFirestore(titulo, cuerpo, base64Imagen, usuarioActualId, categoria)
+        if (titulo.isEmpty() || cuerpo.isEmpty() || !categoriaSeleccionada) {
+            Toast.makeText(this, "Completa todos los campos y selecciona una categoría", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val base64Imagen = imagenUri?.let { uriToBase64(it) } ?: ""
+        guardarEnFirestore(titulo, cuerpo, base64Imagen, usuarioActualId, categoria)
     }
 
     private fun guardarEnFirestore(

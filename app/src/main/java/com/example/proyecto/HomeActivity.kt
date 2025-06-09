@@ -113,6 +113,23 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        cargarPublicaciones()
+    }
+
+    private fun cargarPublicaciones() {
+        PublicacionAdapter.cargarPublicaciones(
+            onResult = { publicacionesCargadas ->
+                publicaciones = publicacionesCargadas
+                adapter.actualizarLista(publicaciones)
+            },
+            onError = { e ->
+                Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
     private fun cerrarSesion() {
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)

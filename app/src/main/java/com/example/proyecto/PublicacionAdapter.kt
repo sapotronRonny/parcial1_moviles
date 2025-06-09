@@ -70,22 +70,44 @@ class PublicacionAdapter(
             db.collection("publicaciones")
                 .get()
                 .addOnSuccessListener { result ->
-                    val publicaciones = result.map { doc ->
-                        val creadoEnValue = doc.get("creadoEn")
-                        val creadoEn = if (creadoEnValue is Number) creadoEnValue.toLong() else 0L
-
-                        Publicacion(
-                            id = doc.id,
-                            idUsuario = doc.getString("idUsuario") ?: "",
-                            autorNombre = doc.getString("autorNombre") ?: "",
-                            titulo = doc.getString("titulo") ?: "",
-                            cuerpo = doc.getString("cuerpo") ?: "",
-                            categoria = doc.getString("categoria") ?: "",
-                            urlImagen = doc.getString("urlImagen") ?: "",
-                            creadoEn = creadoEn
-                        )
+                    val publicaciones = mutableListOf<Publicacion>()
+                    val docs = result.documents
+                    if (docs.isEmpty()) {
+                        onResult(emptyList())
+                        return@addOnSuccessListener
                     }
-                    onResult(publicaciones)
+                    var pendientes = docs.size
+                    for (doc in docs) {
+                        val idUsuario = doc.getString("idUsuario") ?: ""
+                        db.collection("usuarios").document(idUsuario)
+                            .get()
+                            .addOnSuccessListener { userDoc ->
+                                val autorNombre = userDoc.getString("nombre") ?: "Desconocido"
+                                val creadoEnValue = doc.get("creadoEn")
+                                val creadoEn = if (creadoEnValue is Number) creadoEnValue.toLong() else 0L
+                                publicaciones.add(
+                                    Publicacion(
+                                        id = doc.id,
+                                        idUsuario = idUsuario,
+                                        autorNombre = autorNombre,
+                                        titulo = doc.getString("titulo") ?: "",
+                                        cuerpo = doc.getString("cuerpo") ?: "",
+                                        urlImagen = doc.getString("urlImagen") ?: "",
+                                        creadoEn = creadoEn
+                                    )
+                                )
+                                pendientes--
+                                if (pendientes == 0) {
+                                    onResult(publicaciones)
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                pendientes--
+                                if (pendientes == 0) {
+                                    onResult(publicaciones)
+                                }
+                            }
+                    }
                 }
                 .addOnFailureListener { e ->
                     onError(e)

@@ -58,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
         chipGroupFiltros.setOnCheckedChangeListener { _, checkedId ->
             val filtro = when (checkedId) {
                 R.id.chkPolitica -> "Política"
-                R.id.chkDeportes -> "Deporte"
+                R.id.chkDeportes -> "Deportes"
                 R.id.chkCultura -> "Cultura"
                 R.id.chkEducacion -> "Educación"
                 R.id.chkSalud -> "Salud"

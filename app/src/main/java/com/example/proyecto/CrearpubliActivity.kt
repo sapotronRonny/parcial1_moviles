@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.os.Build
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,20 +14,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
-import java.util.*
-import android.graphics.BitmapFactory
 import com.google.firebase.Timestamp
-
+import android.graphics.BitmapFactory
 
 class CrearpubliActivity : AppCompatActivity() {
 
     private lateinit var etTitulo: EditText
     private lateinit var etCuerpo: EditText
     private lateinit var ivPreview: ImageView
+    private lateinit var chipGroupCategoria: ChipGroup
     private var imagenUri: Uri? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +36,7 @@ class CrearpubliActivity : AppCompatActivity() {
         etTitulo = findViewById(R.id.etTitulo)
         etCuerpo = findViewById(R.id.etCuerpo)
         ivPreview = findViewById(R.id.ivPreview)
+        chipGroupCategoria = findViewById(R.id.chipGroupCategoria)
 
         findViewById<Button>(R.id.btnAgregarImagen).setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
@@ -49,10 +47,7 @@ class CrearpubliActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnSubirPublicacion).setOnClickListener {
             subirPublicacion()
         }
-
     }
-
-//funciones a partir de aqui
 
     private fun uriToBase64(uri: Uri): String? {
         return try {
@@ -97,17 +92,31 @@ class CrearpubliActivity : AppCompatActivity() {
         val cuerpo = etCuerpo.text.toString().trim()
         val usuarioActualId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        if (titulo.isEmpty() || cuerpo.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+        // Obtener la categoría seleccionada
+        val selectedChipId = chipGroupCategoria.checkedChipId
+        val categoria = if (selectedChipId != -1) {
+            findViewById<Chip>(selectedChipId).text.toString()
+        } else {
+            ""
+        }
+
+        if (titulo.isEmpty() || cuerpo.isEmpty() || categoria.isEmpty()) {
+            Toast.makeText(this, "Completa todos los campos y selecciona una categoría", Toast.LENGTH_SHORT).show()
             return
         }
 
         val base64Imagen = imagenUri?.let { uriToBase64(it) } ?: ""
 
-        guardarEnFirestore(titulo, cuerpo, base64Imagen, usuarioActualId)
+        guardarEnFirestore(titulo, cuerpo, base64Imagen, usuarioActualId, categoria)
     }
 
-    private fun guardarEnFirestore(titulo: String, cuerpo: String, urlImagen: String, usuarioActualId: String) {
+    private fun guardarEnFirestore(
+        titulo: String,
+        cuerpo: String,
+        urlImagen: String,
+        usuarioActualId: String,
+        categoria: String
+    ) {
         val db = FirebaseFirestore.getInstance()
         val id = db.collection("publicaciones").document().id
         val publicacion = hashMapOf(
@@ -115,6 +124,7 @@ class CrearpubliActivity : AppCompatActivity() {
             "idUsuario" to usuarioActualId,
             "titulo" to titulo,
             "cuerpo" to cuerpo,
+            "categoria" to categoria,
             "urlImagen" to urlImagen,
             "creadoEn" to Timestamp.now()
         )
@@ -124,7 +134,6 @@ class CrearpubliActivity : AppCompatActivity() {
                 finish()
             }
             .addOnFailureListener {
-
                 Toast.makeText(this, "Error al subir publicación: ${it.message}", Toast.LENGTH_SHORT).show()
             }
     }

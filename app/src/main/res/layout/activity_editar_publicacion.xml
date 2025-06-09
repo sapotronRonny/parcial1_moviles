@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:hint="Cuerpo"
         android:minLines="3" />
+<!-- activity_editar_publicacion.xml -->
 
     <Button
         android:id="@+id/btnGuardar1"

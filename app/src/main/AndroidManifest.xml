@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -29,9 +30,6 @@
             android:exported="false" />
         <activity
             android:name=".MisPublicacionesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CambiarFoto"
             android:exported="false" />
         <activity
             android:name=".DetallePublicacionActivity"

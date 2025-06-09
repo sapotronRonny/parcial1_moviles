@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)// tareas en backgroud
     implementation(libs.kotlinx.coroutines.android) //tareas asincronas
     implementation(libs.firebase.auth)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
 
 
     implementation (libs.firebase.common)

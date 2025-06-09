@@ -23,7 +23,7 @@ class MisPublicacionesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_mi_publicacion, parent, false)
+            .inflate(R.layout.editareliminar, parent, false)
         return ViewHolder(view)
     }
 

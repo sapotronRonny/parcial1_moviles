@@ -19,29 +19,35 @@ class EditarPublicacionActivity : AppCompatActivity() {
             finish()
             return
         }
+
         val etTitulo = findViewById<EditText>(R.id.etTitulo1)
         val etCuerpo = findViewById<EditText>(R.id.etCuerpo1)
         val btnGuardar = findViewById<Button>(R.id.btnGuardar1)
 
-        publicacion?.let {
-            etTitulo.setText(it.titulo)
-            etCuerpo.setText(it.cuerpo)
+        etTitulo.setText(publicacion.titulo)
+        etCuerpo.setText(publicacion.cuerpo)
 
-            btnGuardar.setOnClickListener {
-                val nuevoTitulo = etTitulo.text.toString()
-                val nuevoCuerpo = etCuerpo.text.toString()
-                FirebaseFirestore.getInstance()
-                    .collection("publicaciones")
-                    .document(it.id.toString())
-                    .update(mapOf("titulo" to nuevoTitulo, "cuerpo" to nuevoCuerpo))
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Publicación actualizada", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(this, "Error al actualizar: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
+        btnGuardar.setOnClickListener {
+            val nuevoTitulo = etTitulo.text.toString()
+            val nuevoCuerpo = etCuerpo.text.toString()
+            val docId = publicacion.id
+
+            if (docId.isNullOrEmpty()) {
+                Toast.makeText(this, "ID de publicación inválido", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            FirebaseFirestore.getInstance()
+                .collection("publicaciones")
+                .document(docId)
+                .update(mapOf("titulo" to nuevoTitulo, "cuerpo" to nuevoCuerpo))
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Publicación actualizada", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error al actualizar: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 }

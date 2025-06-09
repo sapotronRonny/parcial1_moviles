@@ -33,11 +33,13 @@ class PublicacionAdapter(
                     val imageBytes = Base64.decode(publicacion.urlImagen, Base64.DEFAULT)
                     val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                     imagen.setImageBitmap(bitmap)
+                    imagen.visibility = View.VISIBLE
                 } catch (e: Exception) {
                     imagen.setImageResource(android.R.color.darker_gray)
+                    imagen.visibility = View.GONE
                 }
             } else {
-                imagen.setImageResource(android.R.color.darker_gray)
+                imagen.visibility = View.GONE
             }
             itemView.setOnClickListener { onItemClick(publicacion) }
         }

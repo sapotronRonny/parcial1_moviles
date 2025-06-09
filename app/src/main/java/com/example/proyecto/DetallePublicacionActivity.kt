@@ -7,14 +7,13 @@ import com.google.android.material.appbar.MaterialToolbar
 import android.content.Intent
 import android.widget.ImageView
 import android.widget.TextView
-import com.example.proyecto.model.Publicacion
 import android.view.View
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.Locale
 import android.util.Log
-import android.util.Base64
-import android.graphics.BitmapFactory
+import android.widget.Toast
 
 class DetallePublicacionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,62 +29,71 @@ class DetallePublicacionActivity : AppCompatActivity() {
             finish()
         }
 
-        val publicacion = intent.getSerializableExtra("publicacion") as? Publicacion
-
-        if (publicacion == null) {
-            Log.e("Detalle", "No se recibió la publicación")
+        val publicacionId = intent.getStringExtra("publicacionId")
+        if (publicacionId == null) {
+            Log.e("Detalle", "No se recibió el ID de la publicación")
+            Toast.makeText(this, "No se recibió el ID de la publicación", Toast.LENGTH_SHORT).show()
             return
         }
 
-        Log.d("Detalle", "Publicacion recibida: $publicacion")
+        val db = FirebaseFirestore.getInstance()
+        db.collection("publicaciones")
+            .document(publicacionId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    Log.d("Detalle", "Documento Firestore: ${document.data}")
 
-        findViewById<TextView>(R.id.tvTitulo)?.text = publicacion.titulo ?: "Sin título"
-        findViewById<TextView>(R.id.tvCuerpo)?.text = publicacion.cuerpo ?: "Sin cuerpo"
-        findViewById<TextView>(R.id.footer)?.text = "Creado por: ${publicacion.autorNombre ?: "Desconocido"}"
+                    val titulo = document.getString("titulo") ?: "Sin título"
+                    val cuerpo = document.getString("cuerpo") ?: "Sin cuerpo"
+                    val autorNombre = document.getString("autorNombre")
+                    val urlImagen = document.getString("urlImagen")
+                    val fecha = document.get("creadoEn")
 
-        val fechaFormateada = when (val fecha = publicacion.creadoEn) {
-            is java.util.Date -> {
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                dateFormat.format(fecha)
-            }
-            is Long -> {
-                // Si es timestamp (milisegundos)
-                val date = java.util.Date(fecha)
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                dateFormat.format(date)
-            }
-            is String -> {
-                try {
-                    val fechaLimpia = fecha
-                        .replace("\u202F", " ")
-                        .replace(" ", " ")
-                        .replace("a.m.", "AM")
-                        .replace("p.m.", "PM")
-                    // Cambia 'X' por 'Z' para compatibilidad con minSdk 23
-                    val parser = SimpleDateFormat("d 'de' MMMM 'de' yyyy, h:mm:ss a 'UTC'Z", Locale("es", "MX"))
-                    val date = parser.parse(fechaLimpia)
-                    val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                    if (date != null) formatter.format(date) else fecha
-                } catch (e: Exception) {
-                    fecha // Si falla el parseo, muestra el string original
+                    findViewById<TextView>(R.id.tvTitulo)?.text = titulo
+                    findViewById<TextView>(R.id.tvCuerpo)?.text = cuerpo
+
+                    if (autorNombre.isNullOrEmpty()) {
+                        findViewById<TextView>(R.id.footer)?.text = "Creado por: Desconocido"
+                        Toast.makeText(this, "Campo 'autorNombre' vacío o no existe", Toast.LENGTH_SHORT).show()
+                    } else {
+                        findViewById<TextView>(R.id.footer)?.text = "Creado por: $autorNombre"
+                    }
+
+                    val fechaFormateada = when (fecha) {
+                        is com.google.firebase.Timestamp -> {
+                            val date = fecha.toDate()
+                            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                            dateFormat.format(date)
+                        }
+                        is Long -> {
+                            val date = java.util.Date(fecha)
+                            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                            dateFormat.format(date)
+                        }
+                        is String -> fecha
+                        else -> "Fecha no disponible"
+                    }
+                    findViewById<TextView>(R.id.tvFecha)?.text = fechaFormateada
+
+                    val ivImagen = findViewById<ImageView>(R.id.ivImagen)
+                    if (!urlImagen.isNullOrEmpty()) {
+                        ivImagen.visibility = View.VISIBLE
+                        Glide.with(this)
+                            .load(urlImagen)
+                            .into(ivImagen)
+                    } else {
+                        ivImagen.visibility = View.GONE
+                        Toast.makeText(this, "Campo 'urlImagen' vacío o no existe", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.e("Detalle", "No existe la publicación")
+                    Toast.makeText(this, "No existe la publicación", Toast.LENGTH_SHORT).show()
                 }
             }
-            else -> "Fecha no disponible"
-        }
-        findViewById<TextView>(R.id.tvFecha)?.text = fechaFormateada
-
-        val ivImagen = findViewById<ImageView>(R.id.ivImagen)
-        if (!publicacion.urlImagen.isNullOrEmpty()) {
-            try {
-                val imageBytes = Base64.decode(publicacion.urlImagen, Base64.DEFAULT)
-                val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                ivImagen.setImageBitmap(bitmap)
-                ivImagen.visibility = View.VISIBLE
-            } catch (e: Exception) {
-                ivImagen.visibility = View.GONE
+            .addOnFailureListener { e ->
+                Log.e("Detalle", "Error al obtener la publicación", e)
+                Toast.makeText(this, "Error al obtener la publicación", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            ivImagen.visibility = View.GONE
-        }
     }
 }

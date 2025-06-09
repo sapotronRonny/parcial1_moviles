@@ -41,7 +41,7 @@ class HomeActivity : AppCompatActivity() {
 
         adapter = PublicacionAdapter(emptyList()) { publicacion ->
             val intent = Intent(this, DetallePublicacionActivity::class.java)
-            intent.putExtra("publicacion", publicacion)
+            intent.putExtra("publicacionId", publicacion.id) // Solo el ID
             startActivity(intent)
         }
         recyclerView.adapter = adapter

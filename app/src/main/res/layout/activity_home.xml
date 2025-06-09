@@ -45,31 +45,31 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chkPolitica"
+                    android:id="@+id/chipPolitica"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Política" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chkDeportes"
+                    android:id="@+id/chipDeportes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Deportes" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chkCultura"
+                    android:id="@+id/chipCultura"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cultura" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chkEducacion"
+                    android:id="@+id/chipEducacion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Educacion" />
 
                 <com.google.android.material.chip.Chip
-                    android:id="@+id/chkSalud"
+                    android:id="@+id/chipSalud"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Salud" />

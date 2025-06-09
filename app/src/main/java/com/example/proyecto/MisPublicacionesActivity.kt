@@ -36,8 +36,10 @@ class MisPublicacionesActivity : AppCompatActivity() {
                     Publicacion(
                         id = doc.id,
                         idUsuario = data["idUsuario"] as? String ?: "",
+                        autorNombre = data["autorNombre"] as? String ?: "",
                         titulo = data["titulo"] as? String ?: "",
                         cuerpo = data["cuerpo"] as? String ?: "",
+                        categoria = data["categoria"] as? String ?: "", // <-- Aquí va
                         urlImagen = data["urlImagen"] as? String ?: "",
                         creadoEn = creadoEn
                     )

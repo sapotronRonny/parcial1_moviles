@@ -12,5 +12,6 @@ data class Publicacion(
     val urlImagen: String = "",
     val creadoEn: Long = 0L // O el tipo que uses
 ): Serializable
+
 //    val timestamp: Long = System.currentTimeMillis()
 //    val creadoEn: com.google.firebase.Timestamp? = null

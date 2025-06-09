@@ -1,7 +1,9 @@
+
 package com.example.proyecto
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -44,7 +46,6 @@ class HomeActivity : AppCompatActivity() {
         }
         recyclerView.adapter = adapter
 
-        // Cargar todas las publicaciones usando el método del adapter
         PublicacionAdapter.cargarPublicaciones(
             onResult = { publicacionesCargadas ->
                 publicaciones = publicacionesCargadas
@@ -58,15 +59,24 @@ class HomeActivity : AppCompatActivity() {
         chipGroupFiltros.setOnCheckedChangeListener { _, checkedId ->
             val filtro = when (checkedId) {
                 R.id.chipPolitica -> "Política"
-                R.id.chipDeporte -> "Deportes"
+                R.id.chipDeportes -> "Deportes"
                 R.id.chipCultura -> "Cultura"
-                R.id.chipEducacion -> "Educación"
+                R.id.chipEducacion -> "Educacion"
                 R.id.chipSalud -> "Salud"
                 else -> null
             }
             if (filtro != null) {
-                val filtradas = publicaciones.filter { it.categoria == filtro }
+                // Log para depuración
+                publicaciones.forEach {
+                    Log.d("CATEGORIA", "Publicación: ${it.titulo}, Categoría: ${it.categoria}")
+                }
+                val filtradas = publicaciones.filter {
+                    it.categoria.equals(filtro, ignoreCase = true)
+                }
                 adapter.actualizarLista(filtradas)
+                if (filtradas.isEmpty()) {
+                    Toast.makeText(this, "No hay publicaciones en $filtro", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 adapter.actualizarLista(publicaciones)
             }

@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import android.util.Log
 import android.widget.Toast
+import android.util.Base64
+import android.graphics.BitmapFactory
 
 class DetallePublicacionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +62,7 @@ class DetallePublicacionActivity : AppCompatActivity() {
                         findViewById<TextView>(R.id.footer)?.text = "Creado por: $autorNombre"
                     }
 
+                    // Formateo de fecha
                     val fechaFormateada = when (fecha) {
                         is com.google.firebase.Timestamp -> {
                             val date = fecha.toDate()
@@ -71,17 +74,40 @@ class DetallePublicacionActivity : AppCompatActivity() {
                             val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                             dateFormat.format(date)
                         }
-                        is String -> fecha
+                        is String -> {
+                            // Intenta parsear si es string tipo "9 de junio de 2025, 2:25:17 p.m. UTC-5"
+                            try {
+                                val parser = SimpleDateFormat("d 'de' MMMM 'de' yyyy, h:mm:ss a z", Locale("es", "MX"))
+                                val date = parser.parse(fecha)
+                                val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                                if (date != null) formatter.format(date) else fecha
+                            } catch (e: Exception) {
+                                fecha
+                            }
+                        }
                         else -> "Fecha no disponible"
                     }
                     findViewById<TextView>(R.id.tvFecha)?.text = fechaFormateada
 
+                    // Imagen: base64 o URL
                     val ivImagen = findViewById<ImageView>(R.id.ivImagen)
                     if (!urlImagen.isNullOrEmpty()) {
-                        ivImagen.visibility = View.VISIBLE
-                        Glide.with(this)
-                            .load(urlImagen)
-                            .into(ivImagen)
+                        if (urlImagen.startsWith("http")) {
+                            ivImagen.visibility = View.VISIBLE
+                            Glide.with(this)
+                                .load(urlImagen)
+                                .into(ivImagen)
+                        } else {
+                            try {
+                                val imageBytes = Base64.decode(urlImagen, Base64.DEFAULT)
+                                val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                                ivImagen.setImageBitmap(bitmap)
+                                ivImagen.visibility = View.VISIBLE
+                            } catch (e: Exception) {
+                                ivImagen.visibility = View.GONE
+                                Toast.makeText(this, "Error al decodificar la imagen", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     } else {
                         ivImagen.visibility = View.GONE
                         Toast.makeText(this, "Campo 'urlImagen' vacío o no existe", Toast.LENGTH_SHORT).show()

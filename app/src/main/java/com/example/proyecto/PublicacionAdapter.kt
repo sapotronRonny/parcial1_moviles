@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.model.Publicacion
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.Timestamp
 
 class PublicacionAdapter(
     private var publicaciones: List<Publicacion>,
@@ -28,7 +29,9 @@ class PublicacionAdapter(
             autorNombre.text = publicacion.autorNombre
             cuerpo.maxLines = 1
             cuerpo.ellipsize = android.text.TextUtils.TruncateAt.END
-            if (publicacion.urlImagen.isNotEmpty()) {
+
+            // Imagen en base64
+            if (!publicacion.urlImagen.isNullOrEmpty()) {
                 try {
                     val imageBytes = Base64.decode(publicacion.urlImagen, Base64.DEFAULT)
                     val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
@@ -41,6 +44,7 @@ class PublicacionAdapter(
             } else {
                 imagen.visibility = View.GONE
             }
+
             itemView.setOnClickListener { onItemClick(publicacion) }
         }
     }
@@ -57,7 +61,6 @@ class PublicacionAdapter(
 
     override fun getItemCount() = publicaciones.size
 
-    // Método para actualizar la lista de publicaciones
     fun actualizarLista(nuevaLista: List<Publicacion>) {
         publicaciones = nuevaLista
         notifyDataSetChanged()
@@ -85,8 +88,14 @@ class PublicacionAdapter(
                             .get()
                             .addOnSuccessListener { userDoc ->
                                 val autorNombre = userDoc.getString("nombre") ?: "Desconocido"
+                                // Manejo correcto de la fecha tipo Timestamp
                                 val creadoEnValue = doc.get("creadoEn")
-                                val creadoEn = if (creadoEnValue is Number) creadoEnValue.toLong() else 0L
+                                val creadoEn = when (creadoEnValue) {
+                                    is Timestamp -> creadoEnValue.toDate()
+                                    is Long -> java.util.Date(creadoEnValue)
+                                    is String -> creadoEnValue // Si la guardas como string
+                                    else -> null
+                                }
                                 publicaciones.add(
                                     Publicacion(
                                         id = doc.id,

@@ -36,5 +36,6 @@
             android:text="Cuerpo de la publicación"
             android:textSize="15sp"
             android:layout_marginTop="4dp"/>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

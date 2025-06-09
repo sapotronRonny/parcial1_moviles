@@ -37,7 +37,14 @@
             android:textColor="@color/colorTextoBienvenida"
             android:textSize="18sp"
             android:layout_gravity="center" />
-
+        <Button
+            android:id="@+id/btnEditarPublicaciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Editar publicaciones"
+            android:layout_margin="8dp"
+            android:backgroundTint="#AA4212"
+            android:textColor="#FFFFFF"/>
         <!-- RecyclerView para mostrar publicaciones -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

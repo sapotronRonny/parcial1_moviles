@@ -22,6 +22,15 @@
         android:theme="@style/Theme.Proyecto"
         tools:targetApi="31">
         <activity
+            android:name=".EditarPublicacionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MisPublicacionesAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".MisPublicacionesActivity"
+            android:exported="false" />
+        <activity
             android:name=".CambiarFoto"
             android:exported="false" />
         <activity

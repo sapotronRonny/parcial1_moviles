@@ -39,6 +39,10 @@ class CrearpubliActivity : AppCompatActivity() {
         ivPreview = findViewById(R.id.ivPreview)
         chipGroupCategoria = findViewById(R.id.chipGroupCategoria)
 
+        // Selecciona por defecto el primer chip (Política)
+        val chipPolitica = findViewById<Chip>(R.id.chipPolitica)
+        chipPolitica.isChecked = true
+
         findViewById<Button>(R.id.btnAgregarImagen).setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -93,16 +97,16 @@ class CrearpubliActivity : AppCompatActivity() {
         val cuerpo = etCuerpo.text.toString().trim()
         val usuarioActualId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        // Validar selección de categoría usando View.NO_ID
-        val categoriaSeleccionada = chipGroupCategoria.checkedChipId != View.NO_ID
-        val categoria = if (categoriaSeleccionada) {
+        // Permitir que la categoría sea opcional
+        val categoria = if (chipGroupCategoria.checkedChipId != View.NO_ID) {
             findViewById<Chip>(chipGroupCategoria.checkedChipId).text.toString()
         } else {
             ""
         }
 
-        if (titulo.isEmpty() || cuerpo.isEmpty() || !categoriaSeleccionada) {
-            Toast.makeText(this, "Completa todos los campos y selecciona una categoría", Toast.LENGTH_SHORT).show()
+        // Solo validar título y cuerpo
+        if (titulo.isEmpty() || cuerpo.isEmpty()) {
+            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
 

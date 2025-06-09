@@ -93,21 +93,21 @@ class CrearpubliActivity : AppCompatActivity() {
         val usuarioActualId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         // Obtener la categoría seleccionada
-        val selectedChipId = chipGroupCategoria.checkedChipId
-        val categoria = if (selectedChipId != -1) {
-            findViewById<Chip>(selectedChipId).text.toString()
-        } else {
-            ""
-        }
+//        val selectedChipId = chipGroupCategoria.checkedChipId
+//        val categoria = if (selectedChipId != -1) {
+//            findViewById<Chip>(selectedChipId).text.toString()
+//        } else {
+//            ""
+//        }
+//
+//        if (titulo.isEmpty() || cuerpo.isEmpty() || categoria.isEmpty()) {
+//            Toast.makeText(this, "Completa todos los campos y selecciona una categoría", Toast.LENGTH_SHORT).show()
+//            return
+//        }
 
-        if (titulo.isEmpty() || cuerpo.isEmpty() || categoria.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos y selecciona una categoría", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val base64Imagen = imagenUri?.let { uriToBase64(it) } ?: ""
-
-        guardarEnFirestore(titulo, cuerpo, base64Imagen, usuarioActualId, categoria)
+//        val base64Imagen = imagenUri?.let { uriToBase64(it) } ?: ""
+//
+//        guardarEnFirestore(titulo, cuerpo, base64Imagen, usuarioActualId, categoria)
     }
 
     private fun guardarEnFirestore(

@@ -21,6 +21,15 @@
             android:src="@android:color/darker_gray" />
 
         <TextView
+            android:id="@+id/tvAutorNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Autor"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
             android:id="@+id/tvTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

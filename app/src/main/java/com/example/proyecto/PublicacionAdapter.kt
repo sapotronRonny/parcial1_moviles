@@ -23,11 +23,14 @@ class PublicacionAdapter(
         val titulo: TextView = itemView.findViewById(R.id.tvTitulo)
         val cuerpo: TextView = itemView.findViewById(R.id.tvCuerpo)
         val imagen: ImageView = itemView.findViewById(R.id.ivImagen)
-
+        val autorNombre: TextView = itemView.findViewById(R.id.tvAutorNombre)
 
         fun bind(publicacion: Publicacion) {
             titulo.text = publicacion.titulo
             cuerpo.text = publicacion.cuerpo
+            autorNombre.text = publicacion.autorNombre
+            cuerpo.maxLines = 1
+            cuerpo.ellipsize = android.text.TextUtils.TruncateAt.END
             if (publicacion.urlImagen.isNotEmpty()) {
                 try {
                     val imageBytes = Base64.decode(publicacion.urlImagen, Base64.DEFAULT)
@@ -86,4 +89,36 @@ class PublicacionAdapter(
         }
     }
 
+
 }
+
+//    companion object {
+//        fun cargarPublicaciones(
+//            onResult: (List<Publicacion>) -> Unit,
+//            onError: (Exception) -> Unit
+//        ) {
+//            val db = FirebaseFirestore.getInstance()
+//            db.collection("publicaciones")
+//                .get()
+//                .addOnSuccessListener { result ->
+//                    val publicaciones = result.map { doc ->
+//                        val creadoEnValue = doc.get("creadoEn")
+//                        val creadoEn = if (creadoEnValue is Number) creadoEnValue.toLong() else 0L
+//
+//                        Publicacion(
+//                            id = doc.id,
+//                            idUsuario = doc.getString("idUsuario") ?: "",
+//                            autorNombre = doc.getString("autorNombre") ?: "",
+//                            titulo = doc.getString("titulo") ?: "",
+//                            cuerpo = doc.getString("cuerpo") ?: "",
+//                            urlImagen = doc.getString("urlImagen") ?: "",
+//                            creadoEn = creadoEn
+//                        )
+//                    }
+//                    onResult(publicaciones)
+//                }
+//                .addOnFailureListener { e ->
+//                    onError(e)
+//                }
+//        }
+//    }

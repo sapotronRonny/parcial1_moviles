@@ -6,8 +6,6 @@
     android:layout_height="match_parent">
 
     <!-- CONTENIDO PRINCIPAL -->
-
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,15 +35,17 @@
             android:textColor="@color/colorTextoBienvenida"
             android:textSize="18sp"
             android:layout_gravity="center" />
+
+        <!-- RecyclerView para mostrar publicaciones -->
         <Button
             android:id="@+id/btnEditarPublicaciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Editar publicaciones"
             android:layout_margin="8dp"
             android:backgroundTint="#AA4212"
-            android:textColor="#FFFFFF"/>
-        <!-- RecyclerView para mostrar publicaciones -->
+            android:text="Editar publicaciones"
+            android:textColor="#FFFFFF" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"

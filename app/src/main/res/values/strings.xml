@@ -6,7 +6,7 @@
     <string name="correo">Correo electrónico</string>
     <string name="contraseña">Contraseña</string>
     <string name="genero">Género</string>
-    <string name="categoria">Categoría de noticias</string>
+    <string name="categoria">Preferencias</string>
     <string name="provincias">Provincias</string>
 
     <!-- Género -->

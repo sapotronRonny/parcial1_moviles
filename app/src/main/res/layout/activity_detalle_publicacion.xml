@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="#f9f8ee">
 
     <!-- Header con botón de retroceso -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        android:paddingTop="20dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="#aa4212"
         android:title="Detalle"
         android:titleTextColor="@color/white"
         app:navigationIcon="@drawable/ic_arrow_black"
@@ -98,7 +99,7 @@
         android:text="Creado por: Usuario"
         android:textSize="15sp"
         android:textColor="@color/white"
-        android:background="@color/purple_500"
+        android:background="#aa4212"
         android:gravity="center"
         android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"

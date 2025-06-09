@@ -57,7 +57,6 @@ class DetallePublicacionActivity : AppCompatActivity() {
 
                     if (autorNombre.isNullOrEmpty()) {
                         findViewById<TextView>(R.id.footer)?.text = "Creado por: Desconocido"
-                        Toast.makeText(this, "Campo 'autorNombre' vacío o no existe", Toast.LENGTH_SHORT).show()
                     } else {
                         findViewById<TextView>(R.id.footer)?.text = "Creado por: $autorNombre"
                     }

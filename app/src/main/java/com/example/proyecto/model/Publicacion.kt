@@ -8,7 +8,7 @@ data class Publicacion(
     val titulo: String = "",
     val cuerpo: String = "",
     val urlImagen: String = "",
-//    val timestamp: Long = System.currentTimeMillis()
-//    val creadoEn: com.google.firebase.Timestamp? = null
     val creadoEn: Long = 0L // O el tipo que uses
 ): Serializable
+//    val timestamp: Long = System.currentTimeMillis()
+//    val creadoEn: com.google.firebase.Timestamp? = null

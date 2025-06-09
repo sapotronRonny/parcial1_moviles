@@ -30,6 +30,14 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:backgroundTint="#AA4212"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contenido Principal"
+            android:textColor="@color/colorTextoBienvenida"
+            android:textSize="18sp"
+            android:layout_gravity="center" />
+
         <!-- RecyclerView para mostrar publicaciones -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -40,13 +48,6 @@
             android:clipToPadding="false"/>
 
         <!-- Aquí va tu contenido principal -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contenido Principal"
-            android:textColor="@color/colorTextoBienvenida"
-            android:textSize="18sp"
-            android:layout_gravity="center" />
     </LinearLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_agregar"

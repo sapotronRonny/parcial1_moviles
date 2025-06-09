@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt") //habilita las anotaciones para room
     alias(libs.plugins.google.services)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -61,4 +62,6 @@ dependencies {
     implementation (libs.firebase.common)
     implementation(libs.firebase.firestore)
     implementation(platform(libs.firebase.bom))
+
+    implementation(libs.androidx.core.ktx)
 }

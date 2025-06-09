@@ -10,7 +10,7 @@ data class Publicacion(
     val cuerpo: String = "",
     val categoria: String = "",
     val urlImagen: String = "",
-    val creadoEn: Long = 0L // O el tipo que uses
+    val creadoEn: Any? = null // O el tipo que uses
 ): Serializable
 
 //    val timestamp: Long = System.currentTimeMillis()

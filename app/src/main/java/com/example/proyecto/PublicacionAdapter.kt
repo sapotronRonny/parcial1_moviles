@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.model.Publicacion
+import com.google.firebase.firestore.FirebaseFirestore
 
 class PublicacionAdapter(
     private val publicaciones: List<Publicacion>,
@@ -17,13 +18,19 @@ class PublicacionAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titulo: TextView = itemView.findViewById(R.id.tvTitulo)
+        val cuerpo: TextView = itemView.findViewById(R.id.tvCuerpo)
         val imagen: ImageView = itemView.findViewById(R.id.ivImagen)
         fun bind(publicacion: Publicacion) {
             titulo.text = publicacion.titulo
+            cuerpo.text = publicacion.cuerpo
             if (publicacion.urlImagen.isNotEmpty()) {
-                val imageBytes = Base64.decode(publicacion.urlImagen, Base64.DEFAULT)
-                val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                imagen.setImageBitmap(bitmap)
+                try {
+                    val imageBytes = Base64.decode(publicacion.urlImagen, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                    imagen.setImageBitmap(bitmap)
+                } catch (e: Exception) {
+                    imagen.setImageResource(android.R.color.darker_gray)
+                }
             } else {
                 imagen.setImageResource(android.R.color.darker_gray)
             }
@@ -42,4 +49,28 @@ class PublicacionAdapter(
     }
 
     override fun getItemCount() = publicaciones.size
+
+    companion object {
+        fun cargarPublicaciones(
+            onResult: (List<Publicacion>) -> Unit,
+            onError: (Exception) -> Unit
+        ) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("publicaciones")
+                .get()
+                .addOnSuccessListener { result ->
+                    val publicaciones = result.map { doc ->
+                        Publicacion(
+                            titulo = doc.getString("titulo") ?: "",
+                            cuerpo = doc.getString("cuerpo") ?: "",
+                            urlImagen = doc.getString("urlImagen") ?: ""
+                        )
+                    }
+                    onResult(publicaciones)
+                }
+                .addOnFailureListener { e ->
+                    onError(e)
+                }
+        }
+    }
 }

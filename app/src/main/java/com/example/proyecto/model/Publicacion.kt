@@ -5,6 +5,7 @@ import java.io.Serializable
 data class Publicacion(
     val id: String = "",
     val idUsuario: String = "",
+    val autorNombre: String = "",
     val titulo: String = "",
     val cuerpo: String = "",
     val urlImagen: String = "",

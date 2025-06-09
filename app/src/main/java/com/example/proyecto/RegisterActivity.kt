@@ -223,11 +223,12 @@ class RegisterActivity : AppCompatActivity() {
 
                     // Construir el mapa de usuario
                     val usuario = hashMapOf(
+                        "id" to userId,
                         "nombre" to nombre,
                         "correo" to correo,
                         "genero" to genero,
                         "noticia" to noticia.joinToString(", "),
-                        "provincias" to provincia
+                        "provincias" to provincia,
                     )
                     imageBase64?.let { usuario["fotoBase64"] = it }
 

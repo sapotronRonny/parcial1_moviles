@@ -9,17 +9,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto.model.Publicacion
+import com.example.proyecto.model.Usuario
 import com.google.firebase.firestore.FirebaseFirestore
+import com.example.proyecto.R
 
 class PublicacionAdapter(
     private val publicaciones: List<Publicacion>,
     private val onItemClick: (Publicacion) -> Unit
+
 ) : RecyclerView.Adapter<PublicacionAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titulo: TextView = itemView.findViewById(R.id.tvTitulo)
         val cuerpo: TextView = itemView.findViewById(R.id.tvCuerpo)
         val imagen: ImageView = itemView.findViewById(R.id.ivImagen)
+
+
         fun bind(publicacion: Publicacion) {
             titulo.text = publicacion.titulo
             cuerpo.text = publicacion.cuerpo
@@ -60,10 +65,17 @@ class PublicacionAdapter(
                 .get()
                 .addOnSuccessListener { result ->
                     val publicaciones = result.map { doc ->
+                        val creadoEnValue = doc.get("creadoEn")
+                        val creadoEn = if (creadoEnValue is Number) creadoEnValue.toLong() else 0L
+
                         Publicacion(
+                            id = doc.id,
+                            idUsuario = doc.getString("idUsuario") ?: "",
+                            autorNombre = doc.getString("autorNombre") ?: "",
                             titulo = doc.getString("titulo") ?: "",
                             cuerpo = doc.getString("cuerpo") ?: "",
-                            urlImagen = doc.getString("urlImagen") ?: ""
+                            urlImagen = doc.getString("urlImagen") ?: "",
+                            creadoEn = creadoEn
                         )
                     }
                     onResult(publicaciones)
